@@ -1,0 +1,22 @@
+name: 问题报告
+description: 使用虚构数据提供可复现步骤。
+body:
+  - type: markdown
+    attributes:
+      value: 不要附真实网络名称、密码、二维码、备份或设备 ID。仅使用能复现问题的虚构示例。
+  - type: input
+    id: version
+    attributes:
+      label: 项目版本与运行系统
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤、预期与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: sample
+    attributes:
+      label: 最小虚构示例（可选）

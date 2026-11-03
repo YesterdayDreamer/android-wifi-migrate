@@ -1,0 +1,38 @@
+name: 兼容性记录
+description: 分别报告具体固件下的导出与保存结果，不附真实凭据。
+body:
+  - type: markdown
+    attributes:
+      value: 请勿上传真实备份、密码、二维码、离线页面、设备序列号或含凭据的截图。
+  - type: textarea
+    id: source
+    attributes:
+      label: 旧手机与系统
+      description: 机型、完整固件版本、Android/API 信息；未知可注明。
+    validations:
+      required: true
+  - type: textarea
+    id: target
+    attributes:
+      label: 新手机与系统
+    validations:
+      required: true
+  - type: dropdown
+    id: route
+    attributes:
+      label: 使用路径
+      options:
+        - ADB 备份 → 系统扫码
+        - ADB 备份 → ADB 保存
+        - Shizuku App JSON
+        - Windows XML → 系统扫码
+        - 其他（请说明）
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: 分阶段结果
+      description: 是否连接授权、备份是否含真实密钥、生成数量、系统列表可见数量、是否实际联网。不要粘贴网络名称和密码。
+    validations:
+      required: true

@@ -1,0 +1,91 @@
+[
+  {
+    "ssid": "SYNTHETIC-LAB-中文",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ],
+    "password": "SyntheticSecret!42",
+    "hidden": false,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  },
+  {
+    "ssid": "SYNTHETIC-PUBLIC",
+    "security": [
+      "OPEN",
+      "OWE"
+    ],
+    "password": "",
+    "hidden": false,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  },
+  {
+    "ssid": "SYNTHETIC-WEP",
+    "security": [
+      "WEP"
+    ],
+    "password": "ABCDEF0123",
+    "hidden": false,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  },
+  {
+    "ssid": "SYNTHETIC/A:B",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ],
+    "password": "SyntheticSecret!42",
+    "hidden": false,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  },
+  {
+    "ssid": "SYNTHETIC:A/B",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ],
+    "password": "SyntheticSecret!42",
+    "hidden": false,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  },
+  {
+    "ssid": "SYNTHETIC-&;:网络",
+    "security": [
+      "WPA2",
+      "WPA3"
+    ],
+    "password": "Synthetic\\;,:\"42",
+    "hidden": true,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  },
+  {
+    "ssid": "SYNTHETIC-PURE-SAE",
+    "security": [
+      "WPA3"
+    ],
+    "password": "SyntheticSecret!42",
+    "hidden": false,
+    "autojoin": true,
+    "private": false,
+    "meteredOverride": "NONE",
+    "macRandomizationSetting": "AUTO"
+  }
+]

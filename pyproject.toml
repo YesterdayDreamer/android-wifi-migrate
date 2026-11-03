@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wifi-migrate"
+version = "0.3.0"
+description = "A Windows companion for organizing and migrating saved Wi-Fi networks across Android devices and brands."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "YesterdayDreamer"}]
+dependencies = ["qrcode==8.2", "pypng==0.20220715.0", "pycryptodome==3.23.0"]
+
+[project.optional-dependencies]
+pdf = ["reportlab>=4,<6"]
+test = ["Pillow>=10", "zxing-cpp>=2.3,<3"]
+
+[project.scripts]
+wifi-migrate = "wifi_migrate.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

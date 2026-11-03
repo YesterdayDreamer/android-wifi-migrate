@@ -1,0 +1,9 @@
+﻿SSID,Authentication,Password,Hidden
+SYNTHETIC-LAB-中文,"WPA2-Personal, WPA3-Personal",SyntheticSecret!42,False
+SYNTHETIC-PUBLIC,"Open, OWE",,False
+SYNTHETIC-WEP,WEP,ABCDEF0123,False
+SYNTHETIC/A:B,"WPA2-Personal, WPA3-Personal",SyntheticSecret!42,False
+SYNTHETIC:A/B,"WPA2-Personal, WPA3-Personal",SyntheticSecret!42,False
+SYNTHETIC-&;:网络,"WPA2-Personal, WPA3-Personal","Synthetic\;,:""42",True
+SYNTHETIC-ENTERPRISE,WPA-Enterprise,SyntheticSecret!42,False
+SYNTHETIC-PURE-SAE,WPA3-Personal,SyntheticSecret!42,False
