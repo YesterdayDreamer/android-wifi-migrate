@@ -9,7 +9,7 @@
 | 导入助手 | 小米实测旧版 APK 安装、打开和传输。系统保存、自动重连和新版报告回传待真机验证。 |
 | ADB 直写 | 华为和小米实测只读预览，实际写入、回读和自动重连待验证。写入和回读流程覆盖模拟测试。 |
 
-Release Gate 在 Windows / Python 3.12 上完成 84 项本地测试，并在含中文和空格的干净路径用已校验的本地 wheel 完成首次安装和启动。GitHub Actions 的 Windows/Linux、Python 3.10/3.12 四组均已通过。公开版本的 Android 任务在 SDK 准备阶段因缺少 sdkmanager 中止，显式 SDK 配置修复后仍需在线运行验证。
+Release Gate 在 Windows / Python 3.12 上完成 84 项本地测试，并在含中文和空格的干净路径用已校验的本地 wheel 完成首次安装和启动。GitHub Actions 的 Windows/Linux、Python 3.10/3.12 四组均已通过。补齐 Android SDK 配置后，Android 助手的 Gradle Debug 构建已通过。[GitHub Actions 构建记录](https://github.com/YesterdayDreamer/android-wifi-migrate/actions/runs/41779902592)
 
 ## 当前证据
 
