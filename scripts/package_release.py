@@ -10,11 +10,12 @@ import zipfile
 TOP = {'README.md', 'README.en.md', 'README.zh-CN.md', 'LICENSE', 'CHANGELOG.md', 'CONTRIBUTING.md', 'SECURITY.md',
        'pyproject.toml', 'requirements.txt', 'launch.py', 'Start.cmd', '.gitignore', '.gitattributes'}
 DOCS = {'workflow.md', 'compatibility.md', 'cli.md', 'design.md', 'references.md', 'release-checklist.md', 'toolkit.md'}
+SCREENSHOTS = {'main-interface.png', 'network-catalog.png', 'migration-methods.png'}
 ANDROID = {'settings.gradle.kts', 'app/build.gradle.kts', 'app/src/main/AndroidManifest.xml',
            'app/src/main/java/io/github/wifimigrate/importer/ImportActivity.java'}
 EXAMPLES = {'README.md', 'synthetic-settings.xml', 'synthetic-networks.csv', 'synthetic-manager.json'}
 GITHUB = {'workflows/tests.yml', 'ISSUE_TEMPLATE/compatibility.yml', 'ISSUE_TEMPLATE/bug_report.yml'}
-IGNORED = {'.git', '.venv', 'runs', 'input', 'private', 'output', 'backups', 'private_data', 'build', 'dist',
+IGNORED = {'.git', '.venv', 'runs', 'input', 'private', 'output', 'outputs', 'backups', 'private_data', 'build', 'dist',
            '__pycache__', '.pytest_cache', '.gradle', '.idea'}
 
 
@@ -23,7 +24,8 @@ def allowed(relative):
     if len(parts) == 1:
         return parts[0] in TOP
     if parts[0] == 'docs':
-        return len(parts) == 2 and parts[1] in DOCS
+        return ((len(parts) == 2 and parts[1] in DOCS)
+                or (len(parts) == 3 and parts[1] == 'screenshots' and parts[2] in SCREENSHOTS))
     if parts[0] == 'android-importer':
         return Path(*parts[1:]).as_posix() in ANDROID
     if parts[0] == 'examples':

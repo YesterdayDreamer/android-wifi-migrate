@@ -18,7 +18,9 @@ class ReleaseTests(unittest.TestCase):
     def test_repository_source_allowlist(self):
         files = packager.source_files(ROOT)
         self.assertTrue(files)
-        self.assertFalse(any(path.suffix in ('.adb', '.tar', '.data', '.png') for path in files))
+        self.assertFalse(any(path.suffix in ('.adb', '.tar', '.data') for path in files))
+        self.assertEqual({p.name for p in files if p.suffix == '.png'}, packager.SCREENSHOTS)
+        self.assertFalse(packager.allowed(Path('docs/screenshots/personal.png')))
 
     def test_real_output_names_not_allowed(self):
         for name in ('networks.json', 'phone.adb', 'backup.tar', 'review.html', 'photo.png', 'private.csv'):

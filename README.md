@@ -1,465 +1,62 @@
 # WiFi Migrate
 
-**Cross-brand Android Wi-Fi Migration Toolkit**
+[简体中文](README.md) | [English](README.en.md)
 
-A Windows companion for organizing, converting, and migrating saved Wi-Fi networks across Android devices and brands.
+> **先试 WiFi Password Manager。** 如果它和 Shizuku 在新旧两台 Android 手机上都能用，直接在 App 内导出并恢复原生备份通常最方便。WiFi Password Manager 支持查看已保存网络、导入和导出 JSON，以及 GZip 和加密导出。
+>
+> [WiFi Password Manager · GitHub](https://github.com/Khh-vu/wifi-password-manager) · [F-Droid](https://f-droid.org/packages/io.github.wifi_password_manager/) · [Shizuku](https://github.com/RikkaApps/Shizuku)
 
-[简体中文](#简体中文)
+**跨品牌 Android Wi-Fi 迁移工具 · 0.3.0 Beta**
 
----
+在 Windows 上整理多种备份、检查冲突并选择要迁移的网络。适合两台手机需要不同恢复方式、想合并多份备份，或手头只有旧 ADB 备份及 Windows WLAN 配置的情况。
 
-## Start here: Try WiFi Password Manager first
+## 快速开始
 
-**In most cases, you may not need this project at all.**
+1. 安装带 Tkinter 的 **Python 3.10 或更新版本**。
+2. [下载 0.3.0 Beta](https://github.com/YesterdayDreamer/android-wifi-migrate/releases/tag/v0.3.0-beta) 的源码 ZIP 并解压。
+3. 双击 **Start.cmd**。首次启动会在项目目录创建 `.venv`，安装基础依赖。之后会复用该环境，通常无需管理员权限。
+4. 点击「打开备份」并选择 `examples/synthetic-settings.xml`，即可离线试用网络列表、CSV/JSON 导出和扫码清单。
 
-If both your old and new Android phones support [Shizuku](https://github.com/RikkaApps/Shizuku), and [WiFi Password Manager](https://github.com/Khh-vu/wifi-password-manager) works on both devices, it is usually the simplest way to export and restore your saved Wi-Fi networks.
+**ADB 仅用于连接手机的操作。** 软件会自动查找本机 ADB，也支持手动选择或按需从 Google 下载。生成 PDF 是可选功能，在项目目录执行：
 
-WiFi Password Manager already supports:
+```powershell
+.\.venv\Scripts\python.exe -m pip install -e ".[pdf]"
+```
 
-- Viewing saved Wi-Fi networks and passwords.
-- Importing and exporting configurations as JSON.
-- GZip compression and encrypted exports.
-- Managing and restoring saved networks through Shizuku or root access.
+如果首次安装依赖失败，窗口会显示 pip 错误。明文输入仍可导出 CSV/JSON，二维码和加密备份可能暂不可用。使用说明与故障排查见 [操作指南](docs/toolkit.md)。
 
-**Recommended:** Try WiFi Password Manager before installing WiFi Migrate.
+## 界面预览
 
-- [WiFi Password Manager — GitHub](https://github.com/Khh-vu/wifi-password-manager)
-- [WiFi Password Manager — F-Droid](https://f-droid.org/packages/io.github.wifi_password_manager/)
-- [Shizuku — GitHub](https://github.com/RikkaApps/Shizuku)
+以下为 Windows 实际运行截图，使用虚构示例。
 
-WiFi Password Manager currently targets Android 11 and newer. Actual availability depends on your device, Android version, and system permissions.
+![首页](docs/screenshots/main-interface.png)
 
----
+<details>
+<summary>查看网络列表和迁移页面</summary>
 
-## Why WiFi Migrate?
+![网络列表](docs/screenshots/network-catalog.png)
 
-Android does not provide one universal method for transferring saved Wi-Fi configurations across all manufacturers and system versions.
+![迁移方式](docs/screenshots/migration-methods.png)
 
-Some devices work well with Shizuku-based tools. Others have limited debugging options, different system restrictions, or no convenient way to restore multiple networks.
+</details>
 
-**WiFi Migrate connects these different methods through a single Windows desktop workflow.**
+## 备份、整理与导出
 
-It does not aim to replace WiFi Password Manager or reinvent Android Wi-Fi backup. Instead, it helps when existing tools are not sufficient.
+- 读取 WPM 明文或 GZip JSON、支持的 Android Backup/TAR/设置文件、CSV/JSON 和 Windows WLAN XML。也可读取 Windows 本机保存的 WLAN。旧式 ADB Backup 取决于旧机固件，加密 WPM 导出请在原 App 解密后重新导出。
+- 搜索、筛选和合并备份，保留同名冲突，选择单条或批量导出。
+- 导出扩展 JSON、CSV、二维码 PNG、离线扫码清单及 A4 PDF。原始备份可独立归档并用 SHA-256 校验。
 
-With WiFi Migrate, you can:
+## 选择迁移方式
 
-- Import Wi-Fi data from different sources.
-- Organize and merge multiple backups.
-- Identify duplicate networks and conflicting credentials.
-- Select which networks to migrate.
-- Choose a suitable transfer method for the target device.
-- Generate QR codes and printable PDF sheets.
-- Archive original backups for future use.
+| 方式 | 适用情况与步骤 |
+| --- | --- |
+| **WiFi Password Manager + Shizuku · 推荐** | 优先使用 App 原生备份。工作台生成的兼容 JSON 尚待真机验证，建议先试少量并检查 App 的 On-device 分类。 |
+| **Android 导入助手 · 实验性** | Android 11+ 可用系统确认界面，每批最多 5 条。助手可导出系统结果报告。 |
+| **电脑 ADB 直写 · 实验性** | 先只读预览，再试存一条、检查系统列表并确认，才可批量保存。 |
+| **二维码** | 适合少量迁移，可扫电脑屏幕或复制图片到手机。纯 OWE 和 Open/OWE 过渡网络不会生成开放二维码，WPA2/WPA3 过渡码仅携带标记过的 WPA2 兼容项。 |
 
-## When should you use it?
+旧机和新机在界面中分别选择。文件复制、系统保存和自动重连分别核对。[兼容性记录](docs/compatibility.md)列出了鸿蒙 4.2 → vivo 的 WPM 原生迁移、华为 USB Shizuku、小米助手安装和传输，以及华为和小米的 ADB 只读预览。助手系统保存、ADB 实际写入及自动重连仍待验证。
 
-| Your situation | Recommended approach |
-|---|---|
-| Both phones support Shizuku and WiFi Password Manager | Use WiFi Password Manager directly |
-| You already have a WiFi Password Manager backup | Open it in WiFi Migrate to inspect, organize, and export |
-| Your old phone has no wireless debugging | Try starting Shizuku through USB ADB |
-| Your old phone cannot use Shizuku | Import an existing backup or try supported legacy backup methods |
-| Your new phone cannot use WiFi Password Manager | Try the Android import helper or another supported method |
-| You only need to migrate a few networks | Generate QR codes |
-| You want to keep a long-term Wi-Fi backup | Export JSON / CSV and archive the original files |
-| You want to transfer networks saved on Windows | Import Windows WLAN configurations |
+## 隐私与许可证
 
----
-
-## Features
-
-### 1. Multiple data sources
-
-Import Wi-Fi configurations from:
-
-- WiFi Password Manager JSON exports.
-- GZip-compressed JSON exports.
-- Legacy Android ADB backups (`.ab` / `.adb`).
-- TAR archives and supported Android settings files.
-- Windows WLAN XML files.
-- Existing CSV and JSON files.
-- Windows saved Wi-Fi configurations.
-
-You can also open an existing backup without connecting a phone or installing ADB.
-
-### 2. Unified Wi-Fi management
-
-All supported inputs are converted into a common data model.
-
-- Search, filter, and sort networks.
-- View SSIDs, passwords, hidden-network flags, and security types.
-- Detect duplicates.
-- Identify networks with the same SSID but different passwords or security configurations.
-- Merge multiple backups while retaining conflict information.
-- Select individual networks or the entire collection for migration.
-
-Original security parameters and other available configuration fields are preserved in the extended backup format whenever possible.
-
-### 3. Multiple migration methods
-
-Choose a migration method according to the capabilities of your target phone.
-
-| Method | Description | Status |
-|---|---|---|
-| **WiFi Password Manager** | Import networks through Shizuku and the Android app | Recommended |
-| **Android Import Helper** | Submit networks through Android's system confirmation interface | Experimental |
-| **Direct ADB Migration** | Preview and attempt to save networks directly through ADB | Experimental |
-| **QR Code Transfer** | Scan individual Wi-Fi configuration QR codes | Available |
-
-The software keeps source and target devices separate and uses explicit ADB device selection to avoid accidentally operating on the wrong phone.
-
-### 4. Export and backup
-
-Supported outputs include:
-
-| Format | Purpose |
-|---|---|
-| Extended JSON | Preserve as much original configuration data as possible |
-| WiFi Password Manager-compatible JSON | Interoperability with WiFi Password Manager |
-| CSV | Convenient viewing and data processing |
-| QR PNG | Individual Wi-Fi QR codes |
-| Offline scan sheet | Browse and check QR codes locally |
-| A4 PDF | Printable QR code collection |
-| Original backup archive | Preserve source files with SHA-256 verification |
-
-**Compatibility note:** Importing a native WiFi Password Manager backup and importing a JSON file generated by WiFi Migrate are two different operations. The latter should be verified against the target app version before relying on it.
-
-QR codes and some migration methods cannot represent every Android Wi-Fi configuration. Unsupported security types and advanced settings may be skipped or require manual handling.
-
----
-
-## How to use
-
-### Step 1 — Get Wi-Fi configurations from the old device
-
-The recommended approach is to use WiFi Password Manager:
-
-1. Install Shizuku and WiFi Password Manager on the old phone.
-2. Start Shizuku and authorize WiFi Password Manager.
-3. Export the saved Wi-Fi networks from the app.
-4. Transfer the exported JSON or GZip file to your Windows PC.
-
-If wireless debugging is unavailable, USB ADB may be used to start Shizuku, depending on device support.
-
-Alternatively, open an existing backup file or try the supported legacy backup methods.
-
-### Step 2 — Review and organize
-
-Open the backup in WiFi Migrate:
-
-1. Inspect the parsed networks.
-2. Review duplicates and conflicting entries.
-3. Merge additional backups if needed.
-4. Select the networks you want to migrate.
-5. Generate the appropriate target-side data.
-
-### Step 3 — Transfer to the new device
-
-Connect the target phone and choose an available method:
-
-- WiFi Password Manager import.
-- Android Import Helper.
-- Direct ADB migration.
-- QR code scanning.
-
-Some methods require authorization or confirmation on the phone itself.
-
-### Step 4 — Verify the result
-
-WiFi Migrate distinguishes between:
-
-- File transferred.
-- Configuration submitted.
-- System confirmed saving.
-- Network visible in the saved-network list.
-- Automatic reconnection verified.
-
-A successful file transfer does not mean the network has been saved. A system confirmation does not guarantee automatic reconnection.
-
----
-
-## Requirements
-
-- Windows desktop.
-- Python environment compatible with the project dependencies.
-- Android Debug Bridge (ADB) for device-connected workflows.
-- Shizuku and WiFi Password Manager for the recommended app-based migration route.
-
-ADB is optional for offline backup processing and QR / PDF generation. The application can discover an existing ADB installation or guide users through obtaining official Android Platform Tools.
-
-See the project documentation and release notes for installation details.
-
----
-
-## Compatibility and testing status
-
-The following results reflect actual device testing, not universal compatibility guarantees.
-
-| Feature | Current verification |
-|---|---|
-| HarmonyOS 4.2 → vivo X200 Ultra | WiFi Password Manager export/import successfully tested |
-| Starting Shizuku through USB ADB | Tested on a Huawei device |
-| Android Import Helper | Installation, launch, and file transfer tested on a Xiaomi device; system saving still needs verification |
-| Direct ADB migration | Read-only preview tested on Huawei and Xiaomi; actual writing and automatic reconnection remain unverified |
-| QR / PDF | Sample generation and QR decoding tested |
-
-Experimental features are provided for evaluation and may not work on every device or firmware version.
-
----
-
-## Privacy and security
-
-WiFi Migrate is designed for local processing.
-
-- No cloud account is required.
-- Wi-Fi data is processed locally on your PC.
-- Original backup files can be archived separately.
-- Migration reports do not intentionally include plaintext Wi-Fi passwords.
-
-**Important:** Exported JSON, CSV, QR images, PDFs, and offline HTML pages may contain plaintext credentials or scannable Wi-Fi information. Treat them as sensitive files and never upload personal backups to public repositories.
-
----
-
-## Acknowledgements
-
-- [WiFi Password Manager](https://github.com/Khh-vu/wifi-password-manager) — Android Wi-Fi management and backup/restore.
-- [Shizuku](https://github.com/RikkaApps/Shizuku) — Privileged API access for Android applications.
-- [Android Platform Tools](https://developer.android.com/tools/releases/platform-tools) — Android device communication utilities.
-
-## License
-
-See [LICENSE](LICENSE) for license information.
-
----
-
-## 简体中文
-
-**跨品牌 Android Wi-Fi 迁移工具**
-
-在 Windows 上整理、转换和迁移不同 Android 设备及品牌保存的 Wi-Fi 网络。
-
-[English](#wifi-migrate)
-
----
-
-### 从这里开始：先试 WiFi Password Manager
-
-**多数情况下，你可能根本用不到本项目。**
-
-如果新旧两台 Android 手机都支持 [Shizuku](https://github.com/RikkaApps/Shizuku)，且 [WiFi Password Manager](https://github.com/Khh-vu/wifi-password-manager) 在两台设备上都能正常工作，直接用它导出和恢复已保存的 Wi-Fi 网络，通常最省事。
-
-WiFi Password Manager 已经支持：
-
-- 查看已保存的 Wi-Fi 网络和密码。
-- 以 JSON 格式导入和导出配置。
-- GZip 压缩和加密导出。
-- 通过 Shizuku 或 Root 权限管理和恢复已保存网络。
-
-**建议：** 安装 WiFi Migrate 前，先试试 WiFi Password Manager。
-
-- [WiFi Password Manager · GitHub](https://github.com/Khh-vu/wifi-password-manager)
-- [WiFi Password Manager · F-Droid](https://f-droid.org/packages/io.github.wifi_password_manager/)
-- [Shizuku · GitHub](https://github.com/RikkaApps/Shizuku)
-
-WiFi Password Manager 目前面向 Android 11 及更新版本。能否使用取决于设备、Android 版本和系统权限。
-
----
-
-### 为什么需要 WiFi Migrate？
-
-Android 没有一种适用于所有厂商和系统版本的已保存 Wi-Fi 配置迁移方式。
-
-有些设备可以顺利使用基于 Shizuku 的工具，也有些设备调试选项有限，系统限制不同，或缺少方便的批量恢复方式。
-
-**WiFi Migrate 将这些方法接入同一套 Windows 桌面流程。**
-
-它补足现有工具在换机场景下的衔接环节，并继续利用 WiFi Password Manager 和 Android 已有的备份能力。
-
-使用 WiFi Migrate，你可以：
-
-- 从不同来源导入 Wi-Fi 数据。
-- 整理和合并多份备份。
-- 识别重复网络和凭据冲突。
-- 选择要迁移的网络。
-- 根据目标设备选择适合的迁移方式。
-- 生成二维码和可打印的 PDF。
-- 归档原始备份，供日后使用。
-
-### 什么情况下适合使用？
-
-| 你的情况 | 建议做法 |
-|---|---|
-| 两台手机都支持 Shizuku 和 WiFi Password Manager | 直接使用 WiFi Password Manager |
-| 已有 WiFi Password Manager 备份 | 用 WiFi Migrate 打开，查看、整理和导出 |
-| 旧机没有无线调试 | 尝试通过 USB ADB 启动 Shizuku |
-| 旧机无法使用 Shizuku | 导入已有备份，或尝试受支持的传统备份方式 |
-| 新机无法使用 WiFi Password Manager | 尝试 Android 导入助手或其他受支持的方式 |
-| 只需迁移少量网络 | 生成二维码 |
-| 想长期保存 Wi-Fi 备份 | 导出 JSON / CSV，并归档原始文件 |
-| 想迁移 Windows 保存的网络 | 导入 Windows WLAN 配置 |
-
----
-
-### 功能
-
-#### 1. 多种数据来源
-
-支持从以下来源导入 Wi-Fi 配置：
-
-- WiFi Password Manager 导出的 JSON。
-- GZip 压缩的 JSON。
-- 传统 Android ADB 备份（`.ab` / `.adb`）。
-- TAR 归档和受支持的 Android 设置文件。
-- Windows WLAN XML 文件。
-- 已有的 CSV 和 JSON 文件。
-- Windows 保存的 Wi-Fi 配置。
-
-打开已有备份无需连接手机或安装 ADB。
-
-#### 2. 统一管理 Wi-Fi 数据
-
-所有受支持的输入都会转换成统一的数据模型。
-
-- 搜索、筛选和排序网络。
-- 查看 SSID、密码、隐藏网络标记和认证类型。
-- 检测重复条目。
-- 识别名称相同、但密码或认证配置不同的网络。
-- 合并多份备份，同时保留冲突信息。
-- 选择单条网络或全部网络进行迁移。
-
-扩展备份格式会尽量保留原始安全参数和源文件中其他可用的配置字段。
-
-#### 3. 多种迁移方式
-
-根据目标手机的能力选择迁移方式。
-
-| 方式 | 说明 | 状态 |
-|---|---|---|
-| **WiFi Password Manager** | 通过 Shizuku 和手机 App 导入网络 | 推荐 |
-| **Android 导入助手** | 通过 Android 系统确认界面提交网络 | 实验性 |
-| **ADB 直写迁移** | 通过 ADB 预览并尝试直接保存网络 | 实验性 |
-| **二维码迁移** | 逐条扫描 Wi-Fi 配置二维码 | 可用 |
-
-软件将来源设备和目标设备分开，并要求明确选择 ADB 设备，避免误操作另一台手机。
-
-#### 4. 导出与备份
-
-支持以下输出：
-
-| 格式 | 用途 |
-|---|---|
-| 扩展 JSON | 尽量保留原始配置数据 |
-| WiFi Password Manager 兼容 JSON | 与 WiFi Password Manager 交换数据 |
-| CSV | 便于查看和处理数据 |
-| 二维码 PNG | 单个 Wi-Fi 网络的二维码 |
-| 离线扫码清单 | 在本地浏览和核对二维码 |
-| A4 PDF | 可打印的二维码合集 |
-| 原始备份归档 | 保存源文件并使用 SHA-256 校验 |
-
-**兼容性说明：** 导入 WiFi Password Manager 原生备份，与导入 WiFi Migrate 生成的 JSON，是两种不同操作。使用生成的 JSON 前，请先在目标 App 版本上验证。
-
-二维码及部分迁移方式能表达的 Android Wi-Fi 配置有限。不支持的认证类型和高级设置可能会被跳过，或需要手动处理。
-
----
-
-### 使用方法
-
-#### 第 1 步 · 从旧机获取 Wi-Fi 配置
-
-推荐使用 WiFi Password Manager：
-
-1. 在旧机安装 Shizuku 和 WiFi Password Manager。
-2. 启动 Shizuku，并给 WiFi Password Manager 授权。
-3. 在 App 内导出已保存的 Wi-Fi 网络。
-4. 将导出的 JSON 或 GZip 文件传到 Windows 电脑。
-
-如果没有无线调试，可以尝试通过 USB ADB 启动 Shizuku，具体取决于设备支持情况。
-
-也可以直接打开已有备份，或尝试受支持的传统备份方式。
-
-#### 第 2 步 · 检查和整理
-
-在 WiFi Migrate 中打开备份：
-
-1. 查看解析出的网络。
-2. 检查重复条目和冲突。
-3. 按需合并其他备份。
-4. 选择要迁移的网络。
-5. 生成适合新机导入的数据。
-
-#### 第 3 步 · 迁移到新机
-
-连接目标手机，选择可用的方式：
-
-- WiFi Password Manager 导入。
-- Android 导入助手。
-- ADB 直写迁移。
-- 扫描二维码。
-
-某些方式需要在手机上授权或确认。
-
-#### 第 4 步 · 核对结果
-
-WiFi Migrate 区分以下状态：
-
-- 文件已传输。
-- 配置已提交。
-- 系统确认保存。
-- 网络在系统已保存列表中可见。
-- 已验证自动重连。
-
-文件传输成功后，还需要确认网络是否保存。系统确认保存后，也需要单独验证自动重连。
-
----
-
-### 使用要求
-
-- Windows 桌面环境。
-- 与项目依赖兼容的 Python 环境。
-- 连接设备的操作需要 Android Debug Bridge（ADB）。
-- 推荐的 App 迁移方式需要 Shizuku 和 WiFi Password Manager。
-
-离线处理备份、生成二维码或 PDF 时，可以不用 ADB。软件会查找已有的 ADB，也能引导用户获取官方 Android Platform Tools。
-
-安装详情见项目文档和发布说明。
-
----
-
-### 兼容性与测试状态
-
-下表记录的是实际设备测试结果。其他设备的兼容性仍需单独验证。
-
-| 功能 | 当前验证情况 |
-|---|---|
-| HarmonyOS 4.2 → vivo X200 Ultra | 已实测 WiFi Password Manager 导出和导入成功 |
-| 通过 USB ADB 启动 Shizuku | 已在华为设备上验证 |
-| Android 导入助手 | 已在小米设备上验证安装、启动和文件传输，系统保存仍待验证 |
-| ADB 直写迁移 | 已在华为和小米设备上验证只读预览，实际写入和自动重连仍待验证 |
-| 二维码 / PDF | 已验证样例生成和二维码解码 |
-
-实验性功能供测试使用，部分设备或固件版本可能无法使用。
-
----
-
-### 隐私与安全
-
-WiFi Migrate 在本地处理数据。
-
-- 无需云端账号。
-- Wi-Fi 数据在你的电脑本地处理。
-- 原始备份文件可以单独归档。
-- 迁移报告的设计会避开明文 Wi-Fi 密码。
-
-**重要：** 导出的 JSON、CSV、二维码图片、PDF 和离线 HTML 页面可能含有明文凭据或可扫码获取的 Wi-Fi 信息。请按敏感文件保管，避免将个人备份上传到公开仓库。
-
----
-
-### 鸣谢
-
-- [WiFi Password Manager](https://github.com/Khh-vu/wifi-password-manager) · Android Wi-Fi 管理、备份与恢复。
-- [Shizuku](https://github.com/RikkaApps/Shizuku) · 为 Android 应用提供访问特权 API 的途径。
-- [Android Platform Tools](https://developer.android.com/tools/releases/platform-tools) · Android 设备通信工具。
-
-### 许可证
-
-许可证信息见 [LICENSE](LICENSE)。
+数据在本地处理。备份、CSV/JSON、二维码、PDF 和内嵌二维码的离线 HTML 都可能含有凭据。迁移报告也可能含设备标识。公开分享前请检查文件内容。详见 [SECURITY.md](SECURITY.md) 和 [MIT 许可证](LICENSE)。

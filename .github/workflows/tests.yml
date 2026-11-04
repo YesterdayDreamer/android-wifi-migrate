@@ -17,6 +17,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
       - run: python -m pip install -e '.[test,pdf]'
+      - run: python -m compileall -q src
       - run: python -m unittest discover -s tests -v
       - run: python launch.py convert examples/synthetic-settings.xml --out runs/ci-demo
       - run: python scripts/package_release.py --out ../wifi-migrate-source.zip
@@ -30,8 +31,12 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Set up Android SDK 35
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
+        with:
+          packages: 'platforms;android-35 build-tools;35.0.0'
+          log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.9'
-      - run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - run: gradle -p android-importer assembleDebug
